@@ -1,4 +1,4 @@
-#DEMO VERSION, NOT READY FOR PRODUCTION
+# DEMO VERSION, NOT READY FOR PRODUCTION
 
 # simple-redux-collection - Redux helper for simple collection management
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/volodymyrl/simple-redux-collection/master.svg)](https://codecov.io/gh/volodymyrl/simple-redux-collection/)
