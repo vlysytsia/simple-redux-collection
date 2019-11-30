@@ -23,12 +23,14 @@ yarn add simple-redux-collection
 import collectionReducer from "simple-redux-collection";
 ```
 
-**collectionReducer(name, initialState)** : *Function*
+**collectionReducer({name, initialState, key})**
 
 ##### Params
 `name` : *String [required]* - reducer name, all actions types will be created in `@${name}/action_type` format 
 
 `initialState` : *Object [optional]* - reducer inital state (empty object by default)
+
+`key`: *String [optional]* - key for collection management 
 
 ##### Return object  **{ACTIONS_TYPES, actionCreators, reducer}**
 
@@ -44,9 +46,9 @@ import collectionReducer from "simple-redux-collection";
 
 `actionCreators`: *Object* - object of [actions creators](https://redux.js.org/basics/actions#action-creators):
 
-**addItem**(item: *Object* {id - required key}) : *Function*  
-**updateItem**: (item: *Object* {id - required key}) : *Function*  
-**addItems**:(item: *Object* {id - required key}) : *Function*  
+**addItem**(item: *Object* key is required}) : *Function*  
+**updateItem**: (item: *Object* key is required) : *Function*  
+**addItems**:(item: *Object* key is required) : *Function*  
 **removeItem**: (id: *String|Number*) : *Function*  
 **reset**: *Function*
 
@@ -62,7 +64,7 @@ import cr from "simple-redux-collection";
 const initialState = {
   id1: { id: "id1", title: "Commemt body", time: "30/11/2019, 22:21:29" }
 };
-const { reducer, actionCreators } = cr("comments", initialState);
+const { reducer, actionCreators } = cr({name: "comments", initialState});
 export { reducer, actionCreators };
 ```
 
