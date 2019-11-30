@@ -1,7 +1,6 @@
-# Redux collection helper 
-[![Codecov Coverage](https://img.shields.io/codecov/c/github/volodymyrl/redux-collection/master.svg)](https://codecov.io/gh/volodymyrl/redux-collection/)
+# simple-redux-collection - Redux helper for simple collection managment
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/volodymyrl/simple-redux-collection/master.svg)](https://codecov.io/gh/volodymyrl/simple-redux-collection/)
 
-### Redux helper for simple collection managment:
 Include actions for:
 * add new item
 * add new items
