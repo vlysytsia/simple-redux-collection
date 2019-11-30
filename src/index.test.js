@@ -1,6 +1,6 @@
 import reduxCollection from './index';
 
-const reducerName = 'name';
+const name = 'name';
 const item1 = {
   id: 1,
   title: 'item 1',
@@ -16,21 +16,21 @@ const twoItemsState = {
   [item1.id]: item1,
   [item2.id]: item2,
 };
-const initState = { [item1.id]: item1 };
-const { reducer, ACTIONS_TYPES, actionCreators } = reduxCollection(
-  reducerName,
-  initState,
-);
+const initialState = { [item1.id]: item1 };
+const { reducer, ACTIONS_TYPES, actionCreators } = reduxCollection({
+  name,
+  initialState,
+});
 
 describe('reduxCollection test', () => {
   describe('ACTIONS_TYPES test', () => {
-    expect(ACTIONS_TYPES.ADD_ITEM).toBe(`@${reducerName}/add_item`);
+    expect(ACTIONS_TYPES.ADD_ITEM).toBe(`@${name}/add_item`);
 
-    expect(ACTIONS_TYPES.ADD_ITEMS).toBe(`@${reducerName}/add_items`);
+    expect(ACTIONS_TYPES.ADD_ITEMS).toBe(`@${name}/add_items`);
 
-    expect(ACTIONS_TYPES.REMOVE_ITEM).toBe(`@${reducerName}/remove_item`);
+    expect(ACTIONS_TYPES.REMOVE_ITEM).toBe(`@${name}/remove_item`);
 
-    expect(ACTIONS_TYPES.RESET).toBe(`@${reducerName}/reset`);
+    expect(ACTIONS_TYPES.RESET).toBe(`@${name}/reset`);
   });
 
   describe('actions creators test', () => {
@@ -44,7 +44,7 @@ describe('reduxCollection test', () => {
       payload: { id: item1 },
     });
 
-    expect(actionCreators.removeItemById(item1.id)).toEqual({
+    expect(actionCreators.removeItem(item1.id)).toEqual({
       type: ACTIONS_TYPES.REMOVE_ITEM,
       payload: item1.id,
     });
@@ -56,15 +56,15 @@ describe('reduxCollection test', () => {
 
   describe('reducer test', () => {
     it('should return empty object for init without initalState', () => {
-      const { reducer: defaultReducer } = reduxCollection(reducerName);
+      const { reducer: defaultReducer } = reduxCollection(name);
 
       expect(defaultReducer()).toEqual({});
     });
 
     it('should handle addItem action', () => {
-      expect(reducer()).toEqual(initState);
+      expect(reducer()).toEqual(initialState);
 
-      expect(reducer(initState, actionCreators.addItem(item1))).toEqual(
+      expect(reducer(initialState, actionCreators.addItem(item1))).toEqual(
         oneItemState,
       );
 
@@ -73,26 +73,30 @@ describe('reduxCollection test', () => {
       );
     });
 
-    it('should handle removeItemById action', () => {
+    it('should handle removeItem action', () => {
       expect(
-        reducer(twoItemsState, actionCreators.removeItemById(item2.id)),
+        reducer(twoItemsState, actionCreators.removeItem(item2.id)),
       ).toEqual(oneItemState);
 
       expect(
-        reducer(oneItemState, actionCreators.removeItemById(item1.id)),
+        reducer(oneItemState, actionCreators.removeItem(item1.id)),
       ).toEqual({});
     });
 
     it('should handle reset action', () => {
-      expect(reducer(twoItemsState, actionCreators.reset())).toEqual(initState);
+      expect(reducer(twoItemsState, actionCreators.reset())).toEqual(
+        initialState,
+      );
 
-      expect(reducer(oneItemState, actionCreators.reset())).toEqual(initState);
+      expect(reducer(oneItemState, actionCreators.reset())).toEqual(
+        initialState,
+      );
     });
 
     it('should handle addItems action', () => {
-      expect(reducer(initState, actionCreators.addItems(oneItemState))).toEqual(
-        oneItemState,
-      );
+      expect(
+        reducer(initialState, actionCreators.addItems(oneItemState)),
+      ).toEqual(oneItemState);
 
       expect(
         reducer(oneItemState, actionCreators.addItems({ [item2.id]: item2 })),
@@ -102,10 +106,37 @@ describe('reduxCollection test', () => {
     it('should handle updateItem action', () => {
       expect(
         reducer(
-          initState,
+          initialState,
           actionCreators.updateItem({ id: 1, test: 'test value' }),
         ),
       ).toEqual({ [item1.id]: { ...item1, test: 'test value' } });
+    });
+
+    it('should handle action with custom key', () => {
+      const key = 'uid';
+      const state = {
+        1: {
+          uid: 1,
+        },
+      };
+      const title = 'title';
+
+      const {
+        reducer: r,
+        actionCreators: { updateItem },
+      } = reduxCollection({
+        name: 'comments',
+        initialState: state,
+        key,
+      });
+
+      expect(r(state, updateItem({ id: 1, title }))).toEqual(state);
+      expect(r(state, updateItem({ uid: 1, title }))).toEqual({
+        1: {
+          uid: 1,
+          title,
+        },
+      });
     });
   });
 });
