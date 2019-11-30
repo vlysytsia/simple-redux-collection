@@ -1,0 +1,57 @@
+{
+  "name": "redux-collection",
+  "version": "0.0.1",
+  "description": "Helper for creating and managing redux collections",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:cover": "npm run test -- --coverage ",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint src",
+    "build": "./node_modules/.bin/babel src/index.js --out-dir lib"
+  },
+  "files": [
+    "src",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volodymyrl/redux-collection.git"
+  },
+  "keywords": [
+    "redux",
+    "helper",
+    "collection"
+  ],
+  "author": "Volodymyr Lysytsia <vlysytsia@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/volodymyrl/redux-collection.git/issues"
+  },
+  "homepage": "https://github.com/volodymyrl/redux-collection.git#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0"
+  },
+  "dependencies": {
+    "redux": "^4.0.4"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
+  }
+}
