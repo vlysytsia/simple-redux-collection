@@ -35,7 +35,7 @@ import collectionReducer from "simple-redux-collection";
 
 `key: String [optional]` - key for collection management
 
-`initialState : Object [optional]` - reducer initall state (empty object by default)
+`initialState : Object [optional]` - reducer inital state (empty object by default)
 Example of reducer state: 
 ```js
 {
