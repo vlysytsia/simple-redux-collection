@@ -33,6 +33,7 @@ import collectionReducer from "simple-redux-collection";
 `name: String [required]` - reducer name, all actions types will be created in `@{name}/action_type` format
 
 `initialState : Object [optional]` - reducer inital state (empty object by default)
+
 Example of reducer state: 
 ```js
 {
@@ -57,8 +58,6 @@ Example of reducer state:
 
     setItem: ({key, value})
 
-    updateItem: ({key, value})
-
     addItems: ([{key, value}]), 
 
     removeItem: (id: String|Number)
@@ -74,12 +73,12 @@ Let's create collection for list of comments
 
 Reducer file:
 ```js
-import cr from "simple-redux-collection";
+import createReducer from "simple-redux-collection";
 
 const initialState = {
   id1: { id: "id1", title: "Commemt title", time: "30/11/2019, 22:21:29" }
 };
-const { reducer, actionCreators } = cr({name: "comments", initialState});
+const { reducer, actionCreators } = createReducer({name: "comments", initialState});
 
 // reducer function should be added to a root reducer
 export { reducer, actionCreators };
