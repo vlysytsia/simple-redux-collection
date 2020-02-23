@@ -1,6 +1,6 @@
 {
   "name": "simple-redux-collection",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Helper for creating and managing redux collections",
   "main": "./lib/index.js",
   "scripts": {
