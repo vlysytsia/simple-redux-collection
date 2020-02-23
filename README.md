@@ -48,7 +48,7 @@ Example of reducer state:
 `ACTIONS_TYPES: Object`  - all action type constants, can be used in middleware 
 
     SET_ITEM: @{name}/set_item,
-    ADD_ITEMS: @{name}/add_items,
+    SET_ITEMS: @{name}/set_items,
     REMOVE_ITEM: @{name}/remove_item,
     RESET: @${name}/reset,
 
@@ -58,7 +58,7 @@ Example of reducer state:
 
     setItem: ({key, value})
 
-    addItems: ([{key, value}]), 
+    setItems: ([{key, value}]), 
 
     removeItem: (id: String|Number)
 
