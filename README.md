@@ -8,9 +8,8 @@ We work with collections every day, and creating monotonous reducers and actions
 ## [Demo](https://codesandbox.io/s/simple-redux-collection-264my)
 
 ## Include redux actions for:
-* add a new item
-* add new items
-* update item
+* set a new item
+* set new items
 * delete item
 * reset collection to initial state
 
@@ -33,8 +32,6 @@ import collectionReducer from "simple-redux-collection";
 ##### options
 `name: String [required]` - reducer name, all actions types will be created in `@{name}/action_type` format
 
-`key: String [optional]` - key for collection management
-
 `initialState : Object [optional]` - reducer inital state (empty object by default)
 Example of reducer state: 
 ```js
@@ -43,16 +40,13 @@ Example of reducer state:
     uid2: {uid: 'uid2', title: 'title 2'},
 }
 ```
-where `uid` should be used as the `key` option
-
 
 
 ##### Return object **{ACTIONS_TYPES, actionCreators, reducer}**
 
 `ACTIONS_TYPES: Object`  - all action type constants, can be used in middleware 
 
-    ADD_ITEM: @{name}/add_item,
-    UPDATE_ITEM: @{name}/updtae_item,
+    SET_ITEM: @{name}/set_item,
     ADD_ITEMS: @{name}/add_items,
     REMOVE_ITEM: @{name}/remove_item,
     RESET: @${name}/reset,
@@ -61,15 +55,15 @@ where `uid` should be used as the `key` option
 
 `actionCreators: Object` - object of [actions creators](https://redux.js.org/basics/actions#action-creators):
 
-    addItem: (item: Object) => Object, item[key] is required
+    setItem: ({key, value})
 
-    updateItem: (item: Object) => Object, item[key] is required
+    updateItem: ({key, value})
 
-    addItems: (items: Object) => Object, 
+    addItems: ([{key, value}]), 
 
-    removeItem: (id: String|Number) => Object
+    removeItem: (id: String|Number)
 
-    reset: () => Object
+    reset: ()
 
 
 `reducer: (state: Object, action: Object) => state` - regular Redux [reducer](https://redux.js.org/basics/reducers) function
@@ -85,7 +79,7 @@ import cr from "simple-redux-collection";
 const initialState = {
   id1: { id: "id1", title: "Commemt title", time: "30/11/2019, 22:21:29" }
 };
-const { reducer, actionCreators } = cr({name: "comments", initialState, key: 'id'});
+const { reducer, actionCreators } = cr({name: "comments", initialState});
 
 // reducer function should be added to a root reducer
 export { reducer, actionCreators };
@@ -98,14 +92,14 @@ import { connect } from "react-redux";
 import { actionCreators } from "./reducer";
 import Comments from "./Comments";
 
-const { addItem, addItems, removeItem, updateItem, reset } = actionCreators;
+const { setItem, setItems, removeItem, reset } = actionCreators;
 
 const mapStateToProps = state => ({
   comments: state.comments
 });
 
 const mapDispatchToProps = {
-  addItem, addItems, removeItem, updateItem, reset
+  setItem, setItems, removeItem, reset
 };
 
 export default connect(
@@ -121,15 +115,19 @@ Now all actions and collection items can be used as props in the `Comments` comp
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 
-const Comments = ({ comments, addItem, removeItem, reset, updateItem }) => {
+const Comments = ({ comments, setItem, removeItem, reset }) => {
   const [inputValue, changeCommentText] = useState("");
 
   const addNewComment = () => {
     // id is required for creating new item
-    addItem({
-      id: String(Math.random()),
-      title: inputValue,
-      time: new Date().toLocaleString()
+    const id = String(Math.random());
+    setItem({
+      key: id,
+      value: {
+        id,
+        title: inputValue,
+        time: new Date().toLocaleString()
+      }
     });
 
     changeCommentText("");
@@ -143,14 +141,17 @@ const Comments = ({ comments, addItem, removeItem, reset, updateItem }) => {
       />
       <button onClick={addNewComment}>Post new comment</button>
       <div>
-      	{/* you can use your a selector in container to get data in a required format */}
+        {/* you can use your selector in container to return data in required format */}
         {Object.values(comments).map(({ id, title, time }) => (
           <div key={id} className="item">
             <b>{title}</b> <i>Comment time: {time}</i>
             <button
               onClick={() =>
-				// id use as the `key` in reducer and it's required for updating item
-                updateItem({ id, time: new Date().toLocaleString() })
+                // id use as the `key` in reducer and it's required for updating item
+                setItem({
+                  key: id,
+                  value: { id, title, time: new Date().toLocaleString() }
+                })
               }
             >
               Update comment time
@@ -170,14 +171,12 @@ const Comments = ({ comments, addItem, removeItem, reset, updateItem }) => {
 
 Comments.propTypes = {
   comments: PropTypes.array,
-  addItem: PropTypes.func.isRequired,
+  setItem: PropTypes.func.isRequired,
   removeItem: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  updateItem: PropTypes.func.isRequired
 };
 
 export default Comments;
-
 ```
 
 

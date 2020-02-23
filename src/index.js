@@ -1,41 +1,26 @@
-const reduxCollection = ({ name, key = 'id', initialState = {} }) => {
+const reduxCollection = ({ name, initialState = {} }) => {
   const ACTIONS_TYPES = {
-    ADD_ITEM: `@${name}/add_item`,
-    UPDATE_ITEM: `@${name}/updtae_item`,
-    ADD_ITEMS: `@${name}/add_items`,
+    SET_ITEM: `@${name}/set_item`,
+    SET_ITEMS: `@${name}/set_items`,
     REMOVE_ITEM: `@${name}/remove_item`,
     RESET: `@${name}/reset`,
   };
 
   const actionCreators = {
-    addItem: item => ({ type: ACTIONS_TYPES.ADD_ITEM, payload: item }),
-    updateItem: item => ({ type: ACTIONS_TYPES.UPDATE_ITEM, payload: item }),
-    addItems: items => ({ type: ACTIONS_TYPES.ADD_ITEMS, payload: items }),
+    setItem: payload => ({ type: ACTIONS_TYPES.SET_ITEM, payload }),
+    setItems: payload => ({ type: ACTIONS_TYPES.SET_ITEMS, payload }),
     removeItem: id => ({ type: ACTIONS_TYPES.REMOVE_ITEM, payload: id }),
     reset: () => ({ type: ACTIONS_TYPES.RESET }),
   };
 
   const reducer = (state = initialState, action = { type: '' }) => {
     switch (action.type) {
-      case ACTIONS_TYPES.ADD_ITEM:
+      case ACTIONS_TYPES.SET_ITEM:
         return {
           ...state,
-          [action.payload[key]]: action.payload,
+          [action.payload.key]: action.payload.value,
         };
-      case ACTIONS_TYPES.UPDATE_ITEM: {
-        if (action.payload[key]) {
-          return {
-            ...state,
-            [action.payload[key]]: {
-              ...state[action.payload[key]],
-              ...action.payload,
-            },
-          };
-        }
-
-        return state;
-      }
-      case ACTIONS_TYPES.ADD_ITEMS:
+      case ACTIONS_TYPES.SET_ITEMS:
         return {
           ...state,
           ...action.payload,
